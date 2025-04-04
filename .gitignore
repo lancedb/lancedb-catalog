@@ -1,0 +1,96 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Tracing files
+trace-*.json
+
+**/*~
+**/__pycache__
+build/
+dist/
+*.egg-info/
+.python-version
+
+.idea
+cmake-build-*
+.vscode
+.DS_Store
+
+python/lance/_*.cpp
+
+bin/
+
+
+*.parquet
+*.parq
+
+python/thirdparty/arrow/
+python/wheels
+python/benchmark_data
+
+logs
+*.ckpt
+
+docs/_build
+docs/api/python
+
+**/.ipynb_checkpoints/
+docs/notebooks
+
+notebooks/sift
+notebooks/image_data/data
+benchmarks/sift/sift
+benchmarks/sift/sift.lance
+benchmarks/sift/lance_ivf*.csv
+**/sift.tar.gz
+
+wheelhouse
+
+# pandas testing
+.hypothesis
+
+
+**/df.json
+
+# Rust
+target
+**/sccache.log
+
+# c++ lsp
+.ccls-cache/
+
+python/venv
+test_data/venv
+
+**/*.profraw
+*.lance
