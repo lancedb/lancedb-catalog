@@ -9,9 +9,9 @@ and invoke operations in Lance Catalog to read, write and manage Lance tables in
 
 ## Repository structure
 
-| Directory                                      | Description                                    |
-|------------------------------------------------|------------------------------------------------|
-| [spec](./spec)                                 | Lance Catalog OpenAPI specification            |
-| [rust](./rust/lance-catalog-reqwest-client)            | Generated Rust client for Lance Catalog        |
-| [java](./java/lance-catalog-apache-client)     | Generated Apache HTTP client for Lance Catalog |
-| [java](./java/lance-catalog-springboot-server) | Generated SpringBoot server for Lance          |
+| Directory                                      | Description                                         |
+|------------------------------------------------|-----------------------------------------------------|
+| [spec](./spec)                                 | Lance Catalog OpenAPI specification                 |
+| [rust](./rust/lance-catalog-reqwest-client)    | Generated Rust reqwest client for Lance Catalog     |
+| [java](./java/lance-catalog-apache-client)     | Generated Java Apache HTTP client for Lance Catalog |
+| [java](./java/lance-catalog-springboot-server) | Generated Java SpringBoot server for Lance          |

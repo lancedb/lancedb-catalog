@@ -1,6 +1,5 @@
 .github/workflows/maven.yml
 .gitignore
-.openapi-generator-ignore
 README.md
 api/openapi.yaml
 docs/DefaultApi.md
@@ -23,4 +22,3 @@ src/main/java/com/lancedb/lance/catalog/client/apache/auth/ApiKeyAuth.java
 src/main/java/com/lancedb/lance/catalog/client/apache/auth/Authentication.java
 src/main/java/com/lancedb/lance/catalog/client/apache/auth/HttpBasicAuth.java
 src/main/java/com/lancedb/lance/catalog/client/apache/auth/HttpBearerAuth.java
-src/test/java/com/lancedb/lance/catalog/client/apache/api/DefaultApiTest.java
