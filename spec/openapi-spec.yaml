@@ -1,0 +1,40 @@
+openapi: 3.1.1
+info:
+  title: LanceDB REST Catalog API
+  version: 0.0.1
+  description: REST interface for managing Lance dataset or LanceDB databases and tables
+
+paths:
+  /v1/databases:
+    post:
+      tags: [ Database ]
+      summary: Create new database
+      operationId: CreateDatabase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatabaseRequest'
+      responses:
+        201:
+          description: Database created
+          headers:
+            Location:
+              description: URI of created database
+              schema: { type: string }
+
+components:
+
+  schemas:
+    CreateDatabaseRequest:
+      type: object
+      required: [ name, mode ]
+      properties:
+        name: { type: string }
+        mode:
+          type: string
+          enum: [ Create, ExistOk, Overwrite ]
+        options:
+          type: object
+          additionalProperties: { type: string }
