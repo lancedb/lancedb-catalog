@@ -23,7 +23,7 @@ labels:
 - label: breaking-change
   body: "BREAKING CHANGE"
 - label: enhancement
-  title: "^feat(\\(.+\\))?!?:.*"
+  title: "^(feat|spec)(\\(.+\\))?!?:.*"
 - label: bug
   title: "^fix(\\(.+\\))?!?:.*"
 - label: documentation
@@ -40,3 +40,9 @@ labels:
 - label: python
   files:
     - "python\\/.*"
+- label: rust
+  files:
+    - "rust\\/.*"
+- label: spec
+  files:
+    - "spec\\/.*"
