@@ -1,0 +1,62 @@
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+openapi: 3.1.1
+info:
+  title: Lance Catalog REST Specification
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.1
+  description: |
+    **Lance Catalog** is an OpenAPI specification on top of the storage-based Lance format.
+    It provides an integration point for catalog service like Apache Hive MetaStore (HMS), Apache Gravitino, etc.
+    to store and use Lance tables. To integrate, the catalog service implements a **Lance Catalog Adapter**,
+    which is a REST server that converts the Lance catalog requests to native requests against the catalog service.
+    Different tools can integrate with Lance Catalog using the generated OpenAPI clients in various languages,
+    and invoke operations in Lance Catalog to read, write and manage Lance tables in the integrated catalog services.
+
+servers:
+  - url: "{scheme}://{host}:{port}/{basePath}"
+    description: Generic server URL with all parts configurable
+    variables:
+      scheme:
+        default: http
+      host:
+        default: localhost
+      port:
+        default: "2333"
+      basePath:
+        default: ""
+  - url: "{scheme}://{host}/{basePath}"
+    description: Server URL when the port can be inferred from the scheme
+    variables:
+      scheme:
+        default: http
+      host:
+        default: localhost
+      basePath:
+        default: ""
+
+security:
+  - OAuth2: []
+  - BearerAuth: []
+
+paths:
+  /v1/ping:
+    get:
+      summary: Ping the server for use cases like health check
+      operationId: Ping
+      responses:
+        '201':
+          description: OK

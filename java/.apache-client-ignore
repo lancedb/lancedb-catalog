@@ -1,0 +1,11 @@
+**build.gradle
+**.travis.yml
+**build.sbt
+**git_push.sh
+**gradle.properties
+**gradlew
+**gradlew.bat
+**settings.gradle
+**gradle
+**src/test
+**.github

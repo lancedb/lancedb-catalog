@@ -1,9 +1,17 @@
-# Lance Catalog Integrations
+# Lance Catalog
 
-A catalog is, at a minimum, anything that represents a collection of tables, often referred to as a database or schema.  
-Typically these catalogs will often group together collections of databases into a "namespace" or "catalog" 
-(different tools have different names).  We want these tools to be able to integrate with Lance tables.  
-This may be a simple read-only integration where these tools are able to query Lance tables or it may be 
-a more complex integration where these tools can create and manage Lance tables.  
-This repository can be a home for these integrations.
+**Lance Catalog** is an OpenAPI specification on top of the storage-based Lance format.
+It provides an integration point for catalog service like Apache Hive MetaStore (HMS), Apache Gravitino, etc. 
+to store and use Lance tables. To integrate, the catalog service implements a **Lance Catalog Adapter**, 
+which is a REST server that converts the Lance catalog requests to native requests against the catalog service.
+Different tools can integrate with Lance Catalog using the generated OpenAPI clients in various languages,
+and invoke operations in Lance Catalog to read, write and manage Lance tables in the integrated catalog services.
 
+## Repository structure
+
+| Directory                                      | Description                                    |
+|------------------------------------------------|------------------------------------------------|
+| [spec](./spec)                                 | Lance Catalog OpenAPI specification            |
+| [rust](./rust/lance-catalog-reqwest-client)            | Generated Rust client for Lance Catalog        |
+| [java](./java/lance-catalog-apache-client)     | Generated Apache HTTP client for Lance Catalog |
+| [java](./java/lance-catalog-springboot-server) | Generated SpringBoot server for Lance          |

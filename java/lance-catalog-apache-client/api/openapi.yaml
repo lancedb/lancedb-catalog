@@ -1,0 +1,51 @@
+openapi: 3.1.1
+info:
+  description: |
+    **Lance Catalog** is an OpenAPI specification on top of the storage-based Lance format.
+    It provides an integration point for catalog service like Apache Hive MetaStore (HMS), Apache Gravitino, etc.
+    to store and use Lance tables. To integrate, the catalog service implements a **Lance Catalog Adapter**,
+    which is a REST server that converts the Lance catalog requests to native requests against the catalog service.
+    Different tools can integrate with Lance Catalog using the generated OpenAPI clients in various languages,
+    and invoke operations in Lance Catalog to read, write and manage Lance tables in the integrated catalog services.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: Lance Catalog REST Specification
+  version: 0.0.1
+servers:
+- description: Generic server URL with all parts configurable
+  url: "{scheme}://{host}:{port}/{basePath}"
+  variables:
+    scheme:
+      default: http
+    host:
+      default: localhost
+    port:
+      default: "2333"
+    basePath:
+      default: ""
+- description: Server URL when the port can be inferred from the scheme
+  url: "{scheme}://{host}/{basePath}"
+  variables:
+    scheme:
+      default: http
+    host:
+      default: localhost
+    basePath:
+      default: ""
+security:
+- OAuth2: []
+- BearerAuth: []
+paths:
+  /v1/ping:
+    get:
+      operationId: Ping
+      responses:
+        "201":
+          description: OK
+      summary: Ping the server for use cases like health check
+      x-accepts:
+      - application/json
+components:
+  schemas: {}
+
