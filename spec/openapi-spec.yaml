@@ -22,7 +22,12 @@ paths:
   /v1/databases:
     post:
       tags: [ Database ]
-      summary: Create new database
+      summary: >
+        Create a new database. A catalog can manage one or more databases. A database is used to manage one or more tables.
+        There are three modes when trying to create a database:
+          * CREATE: create with fast fail if there is already a database existing with the same name.
+          * EXIST_OK: create and ignore existing database with the same name.
+          * OVERWRITE: it's a dangerous mode, it will delete the existing database (and all the assets it manages), then create a new one.
       operationId: CreateDatabase
       requestBody:
         required: true
@@ -48,7 +53,7 @@ components:
         name: { type: string }
         mode:
           type: string
-          enum: [ Create, ExistOk, Overwrite ]
+          enum: [ CREATE, EXIST_OK, OVERWRITE ]
         options:
           type: object
           additionalProperties: { type: string }
