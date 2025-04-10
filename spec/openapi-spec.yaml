@@ -1,6 +1,6 @@
 openapi: 3.1.1
 info:
-  title: LanceDB REST Catalog API
+  title: Lance REST Catalog API
   version: 0.0.1
   description: REST interface for managing Lance dataset or LanceDB databases and tables
 
