@@ -60,3 +60,204 @@ paths:
       responses:
         '201':
           description: OK
+
+  /v1/databases:
+    post:
+      tags: [ Database ]
+      summary: >
+        Create a new database. A catalog can manage one or more databases. A database is used to manage one or more tables.
+        There are three modes when trying to create a database:
+          * CREATE: create with fast fail if there is already a database existing with the same name.
+          * EXIST_OK: create and ignore existing database with the same name.
+          * OVERWRITE: it's a dangerous mode, it will delete the existing database (and all the assets it manages), then create a new one.
+      operationId: CreateDatabase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatabaseRequest'
+      responses:
+        200:
+          $ref: '#/components/responses/CreateDatabaseResponse'
+        400:
+          $ref: '#/components/responses/BadRequestErrorResponse'
+        403:
+          $ref: '#/components/responses/ForbiddenResponse'
+        406:
+          $ref: '#/components/responses/UnsupportedOperationResponse'
+        503:
+          $ref: '#/components/responses/ServiceUnavailableResponse'
+        5XX:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+components:
+
+  schemas:
+    ErrorModel:
+      type: object
+      description: JSON error payload returned in a response with further details on the error
+      required:
+        - message
+        - type
+        - code
+      properties:
+        message:
+          type: string
+          description: Human-readable error message
+        type:
+          type: string
+          description: Internal type definition of the error
+          example: NoSuchDatabaseException
+        code:
+          type: integer
+          minimum: 400
+          maximum: 600
+          description: HTTP response code
+          example: 404
+        stack:
+          type: array
+          items:
+            type: string
+
+    LanceCatalogErrorResponse:
+      description: JSON wrapper for all error responses (non-2xx)
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorModel'
+      additionalProperties: false
+      example:
+        {
+          "error": {
+            "message": "The server does not support this operation",
+            "type": "UnsupportedOperationException",
+            "code": 406
+          }
+        }
+
+    CreateDatabaseRequest:
+      type: object
+      required: [ name, mode ]
+      properties:
+        name: { type: string }
+        mode:
+          type: string
+          enum: [ CREATE, EXIST_OK, OVERWRITE ]
+        options:
+          type: object
+          additionalProperties: { type: string }
+
+    CreateDatabaseResponse:
+      type: object
+      required:
+        - database
+      properties:
+        database: { type: string }
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+          description:
+            Properties stored on the database, if supported by the server.
+          example: { "created_at": "1452120468" }
+          default: { }
+
+  responses:
+    CreateDatabaseResponse:
+      description:
+        Represents a successful call to create a database.
+        Returns the database created, as well as any properties that were stored for the database,
+        including those the server might have added. Implementations are not required to support database
+        properties.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateDatabaseResponse'
+          example: {
+            "database": [ "lance_database" ],
+            "properties": { "created_at": "1452120468" }
+          }
+
+    BadRequestErrorResponse:
+      description:
+        Indicates a bad request error. It could be caused by an unexpected request
+        body format or other forms of request validation failure, such as invalid json.
+        Usually serves application/json content, although in some cases simple text/plain content might
+        be returned by the server's middleware.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LanceCatalogErrorResponse'
+          example: {
+            "error": {
+              "message": "Malformed request",
+              "type": "BadRequestException",
+              "code": 400
+            }
+          }
+
+    ForbiddenResponse:
+      description: Forbidden. Authenticated user does not have the necessary permissions.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LanceCatalogErrorResponse'
+          example: {
+            "error": {
+              "message": "Not authorized to make this request",
+              "type": "NotAuthorizedException",
+              "code": 403
+            }
+          }
+
+    UnsupportedOperationResponse:
+      description: Not Acceptable / Unsupported Operation. The server does not support this operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          example: {
+            "error": {
+              "message": "The server does not support this operation",
+              "type": "UnsupportedOperationException",
+              "code": 406
+            }
+          }
+
+    ServiceUnavailableResponse:
+      description:
+        The service is not ready to handle the request. The client should wait and retry.
+
+
+        The service may additionally send a Retry-After header to indicate when to retry.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LanceCatalogErrorResponse'
+          example: {
+            "error": {
+              "message": "Slow down",
+              "type": "SlowDownException",
+              "code": 503
+            }
+          }
+
+    ServerErrorResponse:
+      description:
+        A server-side problem that might not be addressable from the client
+        side. Used for server 5xx errors without more specific documentation in
+        individual routes.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LanceCatalogErrorResponse'
+          example: {
+            "error": {
+              "message": "Internal Server Error",
+              "type": "InternalServerError",
+              "code": 500
+            }
+          }
