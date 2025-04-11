@@ -112,9 +112,11 @@ A catalog should choose to support one or multiple types of relationships when i
 
 A catalog managed Lance table is a table that is fully managed by a catalog.
 The catalog must contain information about the latest version of the Lance table,
-and any modifications to the table happens through the catalog.
+and any modifications to the table must happen through the catalog.
+If a user directly modifies the underlying table in the storage bypassing catalog,
+the catalog must not reflect the change to the catalog users for this table.
 
-This approach ensures the catalog service is aware of all activities in the table,
+This mode ensures the catalog service is aware of all activities in the table,
 and can thus fully enforce any governance and management features for the table. 
 
 #### Storage Managed
@@ -127,8 +129,8 @@ A modification to the table can happen either directly against the storage,
 or happen as a request to the catalog, where the catalog is responsible to apply the corresponding
 change to the underlying storage according to the ance format specification.
 
-This approach is more flexible for real world ML/AI workflows 
-but the catalog would lose full visibility over the actions performed against the table,
+This mode is more flexible for real world ML/AI workflows 
+but the catalog loses full visibility and control over the actions performed against the table,
 so it will be harder to enforce any governance and management features for the table.
 
 ## Tool Connection
