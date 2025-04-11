@@ -60,3 +60,190 @@ paths:
       responses:
         '201':
           description: OK
+
+  /v1/namespaces:
+    post:
+      tags: [ Namespace ]
+      summary: >
+        Create a new namespace. A catalog can manage one or more namespaces. A namespace is used to manage one or more tables.
+        There are three modes when trying to create a namespace:
+          * CREATE: Create the namespace if it does not exist. If a namespace of the same name already exists, the operation fails with 400.
+          * EXIST_OK: Create the namespace if it does not exist. If a namespace of the same name already exists, the operation succeeds and the existing namespace is kept.
+          * OVERWRITE: Create the namespace if it does not exist. If a namespace of the same name already exists, the existing namespace is dropped and a new namespace with this name with no table is created.
+      operationId: CreateNamespace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNamespaceRequest'
+      responses:
+        200:
+          $ref: '#/components/responses/CreateNamespaceResponse'
+        400:
+          $ref: '#/components/responses/BadRequestErrorResponse'
+        403:
+          $ref: '#/components/responses/ForbiddenResponse'
+        406:
+          $ref: '#/components/responses/UnsupportedOperationResponse'
+        503:
+          $ref: '#/components/responses/ServiceUnavailableResponse'
+        5XX:
+          $ref: '#/components/responses/ServerErrorResponse'
+
+components:
+
+  schemas:
+    ErrorModel:
+      type: object
+      description: JSON error payload returned in a response with further details on the error
+      required:
+        - type
+        - title
+        - detail
+        - instance
+      properties:
+        type:
+          type: string
+          description: a URI identifier that categorizes the error
+          example: /errors/incorrect-user-pass
+        title:
+          type: string
+          description: a brief, human-readable message about the error
+          example: Incorrect username or password
+        status:
+          type: integer
+          minimum: 400
+          maximum: 600
+          description: HTTP response code
+          example: 404
+        detail:
+          type: string
+          description: a human-readable explanation of the error
+          example: Authentication failed due to incorrect username or password
+        instance:
+          type: string
+          description: a URI that identifies the specific occurrence of the error
+          example: /login/log/abc123
+
+    CreateNamespaceRequest:
+      type: object
+      required: [ name, mode ]
+      properties:
+        name: { type: string }
+        mode:
+          type: string
+          enum: [ CREATE, EXIST_OK, OVERWRITE ]
+        options:
+          type: object
+          additionalProperties: { type: string }
+
+    CreateNamespaceResponse:
+      type: object
+      required:
+        - namespace
+      properties:
+        name: { type: string }
+        properties:
+          type: object
+          additionalProperties:
+            type: string
+          description:
+            Properties stored on the namespace, if supported by the server.
+          example: { "created_at": "1452120468" }
+          default: { }
+
+  responses:
+    CreateNamespaceResponse:
+      description:
+        Represents a successful call to create a namespace.
+        Returns the namespace created, as well as any properties that were stored for the namespace,
+        including those the server might have added. Implementations are not required to support namespace
+        properties.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateNamespaceResponse'
+          example: {
+            "namespace": [ "lance.ns1" ],
+            "properties": { "created_at": "1452120468" }
+          }
+
+    BadRequestErrorResponse:
+      description:
+        Indicates a bad request error. It could be caused by an unexpected request
+        body format or other forms of request validation failure, such as invalid json.
+        Usually serves application/json content, although in some cases simple text/plain content might
+        be returned by the server's middleware.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          example: {
+            "type": "/errors/bad-request",
+            "title": "Malformed request",
+            "status": 400,
+            "detail": "",
+            "instance": "/v1/namespaces"
+          }
+
+    ForbiddenResponse:
+      description: Forbidden. Authenticated user does not have the necessary permissions.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          example: {
+            "type": "/errors/forbidden-request",
+            "title": "Not authorized to make this request",
+            "status": 403,
+            "detail": "",
+            "instance": "/v1/namespaces"
+          }
+
+    UnsupportedOperationResponse:
+      description: Not Acceptable / Unsupported Operation. The server does not support this operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          example: {
+            "type": "/errors/unsupported-operation",
+            "title": "The server does not support this operation",
+            "status": 406,
+            "detail": "",
+            "instance": "/v1/namespaces"
+          }
+
+    ServiceUnavailableResponse:
+      description:
+        The service is not ready to handle the request. The client should wait and retry.
+        The service may additionally send a Retry-After header to indicate when to retry.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          example: {
+            "type": "/errors/service-unavailable",
+            "title": "Slow down",
+            "status": 503,
+            "detail": "",
+            "instance": "/v1/namespaces"
+          }
+
+    ServerErrorResponse:
+      description:
+        A server-side problem that might not be addressable from the client
+        side. Used for server 5xx errors without more specific documentation in
+        individual routes.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          example: {
+            "type": "/errors/server-error",
+            "title": "Internal Server Error",
+            "status": 500,
+            "detail": "",
+            "instance": "/v1/namespaces"
+          }
