@@ -13,7 +13,7 @@ There are in total 2 ways to store and access a collection of Lance tables: file
 Lance directory is lightweight and simple for people to get started with creating and using Lance tables.
 
 A directory can contain a list of Lance tables, where the name of each Lance table is the name of the subdirectory.
-We call such a directory the **Namespace Directory**, and the subdirectories **Table Directory**.
+We call such a directory **Namespace Directory**, and the subdirectories **Table Directory**.
 Consider the following example directory layout:
 
 ```
@@ -35,15 +35,15 @@ Consider the following example directory layout:
 ```
 
 This describes a namespace directory `/my/dir1/` that contains tables `table1`, `table2`, `table3`
-sitting at table directories `/my/dirs/table1`, `/my/dirs/table2`, `/my/dirs/table3`.
+sitting at table directories `/my/dirs/table1`, `/my/dirs/table2`, `/my/dirs/table3` respectively.
 
 ### Namespace Directory Path
 
 There are 3 ways to specify a directory path:
 
-1. URI: a URI that follows the [RFC 3986 specification](https://datatracker.ietf.org/doc/html/rfc3986), e.g. `s3://mu-bucket/prefix`.
-2. Absolute POSIX file system path: an absolute file path in a POSIX standard file system, e.g. `/my/dir`.
-2. Relative POSIX file system path: a relative file path in a POSIX standard file system, e.g. `my/dir2`.
+1. **URI**: a URI that follows the [RFC 3986 specification](https://datatracker.ietf.org/doc/html/rfc3986), e.g. `s3://mu-bucket/prefix`.
+2. **Absolute POSIX file system path**: an absolute file path in a POSIX standard file system, e.g. `/my/dir`.
+2. **Relative POSIX file system path**: a relative file path in a POSIX standard file system, e.g. `my/dir2`.
    The absolute path should be derived by using the current directory of the running process. 
 
 ### Table Directory Ignore File
@@ -64,7 +64,7 @@ Consider the following example directory layout:
     └── .lanceignore
 ```
 
-We can have the following contents in `.lanceignore` in order to ignore the directory
+We can have the following contents in `.lanceignore` in order to ignore the directories
 that are not a table directory:
 
 ```
@@ -75,7 +75,7 @@ build
 ## Lance REST Protocol
 
 In an enterprise environment, typically there is a requirement to store tables in a catalog service 
-such as Apache Hive MetaStore, Apache Gravitino, etc. 
+such as Apache Hive MetaStore, Apache Gravitino, Unity Catalog, etc. 
 for more advanced governance features around access control, auditing, lineage tracking, etc.
 
 Lance REST Protocol is a standardized OpenAPI protocol for any catalog service to implement
