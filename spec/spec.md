@@ -99,8 +99,10 @@ then this server is called a **Lance REST Adapter**.
 
 Some Lance REST adapters do not serve any additional propose outside request response translation
 between the Lance REST APIs and the target catalog service APIs.
-In that case, it is possible for a tool to avoid running the adapter and making the remote network calls.
+In that case, it is possible to avoid running the adapter server and making the remote network calls.
 Instead, the tool can directly execute the adapter locally to contact the catalog service.
+This simplifies the overall architecture and improves performance, 
+but will require an implementation of the adapter in each HTTP client framework that the tools use.
 
 ### Relationship with Table Directory
 
